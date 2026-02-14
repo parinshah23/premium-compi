@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
   // We can add more logic here if needed.
 
   if (!refreshToken) {
-    const loginUrl = new URL('/login', request.url);
+    // const loginUrl = new URL('/login', request.url);
     // Add redirect param so we can send them back after login
     // loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
     // return NextResponse.redirect(loginUrl);

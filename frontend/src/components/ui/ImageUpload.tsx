@@ -23,11 +23,11 @@ interface UploadingFile {
   error?: string;
 }
 
-export function ImageUpload({ 
-  onUpload, 
-  existingImages = [], 
+export function ImageUpload({
+  onUpload,
+  existingImages = [],
   maxImages = 5,
-  className 
+  className
 }: ImageUploadProps) {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [uploadedUrls, setUploadedUrls] = useState<string[]>(existingImages);
@@ -36,7 +36,7 @@ export function ImageUpload({
   const handleFiles = useCallback(async (files: FileList | null) => {
     if (!files) return;
 
-    const imageFiles = Array.from(files).filter(file => 
+    const imageFiles = Array.from(files).filter(file =>
       file.type.startsWith('image/')
     );
 
@@ -67,14 +67,14 @@ export function ImageUpload({
         const response = await api.upload<{ url: string }>('/api/upload/image', formData);
 
         if (response.success && response.data) {
-          setUploadingFiles(prev => 
-            prev.map(f => 
-              f.id === uploadingFile.id 
+          setUploadingFiles(prev =>
+            prev.map(f =>
+              f.id === uploadingFile.id
                 ? { ...f, status: 'completed', url: response.data!.url, progress: 100 }
                 : f
             )
           );
-          
+
           setUploadedUrls(prev => {
             const newUrls = [...prev, response.data!.url];
             onUpload(newUrls);
@@ -84,9 +84,9 @@ export function ImageUpload({
           throw new Error(response.error?.message || 'Upload failed');
         }
       } catch (error) {
-        setUploadingFiles(prev => 
-          prev.map(f => 
-            f.id === uploadingFile.id 
+        setUploadingFiles(prev =>
+          prev.map(f =>
+            f.id === uploadingFile.id
               ? { ...f, status: 'error', error: 'Upload failed' }
               : f
           )
@@ -136,8 +136,8 @@ export function ImageUpload({
           onDrop={handleDrop}
           className={cn(
             'border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer',
-            isDragging 
-              ? 'border-primary-500 bg-primary-50' 
+            isDragging
+              ? 'border-primary-500 bg-primary-50'
               : 'border-gray-300 hover:border-gray-400'
           )}
         >
@@ -169,11 +169,28 @@ export function ImageUpload({
         <div className="space-y-2">
           {uploadingFiles.map(file => (
             <div key={file.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                <img 
-                  src={file.preview} 
-                  alt="Preview" 
+              import Image from 'next/image';
+
+              // ... (inside component)
+
+              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={file.preview}
+                  alt="Preview"
                   className="w-full h-full object-cover"
+                />
+              </div>
+
+// ... (later for uploaded urls)
+
+              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 relative">
+                <Image
+                  src={url}
+                  alt={`Uploaded ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -184,7 +201,7 @@ export function ImageUpload({
                   {file.status === 'uploading' && (
                     <>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-primary-600 h-2 rounded-full transition-all"
                           style={{ width: `${file.progress}%` }}
                         />
@@ -214,8 +231,8 @@ export function ImageUpload({
           {uploadedUrls.map((url, index) => (
             <div key={url} className="relative group">
               <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                <img 
-                  src={url} 
+                <img
+                  src={url}
                   alt={`Uploaded ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
