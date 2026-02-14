@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
 import { Upload, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface ImageUploadProps {
@@ -169,28 +170,12 @@ export function ImageUpload({
         <div className="space-y-2">
           {uploadingFiles.map(file => (
             <div key={file.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              import Image from 'next/image';
-
-              // ... (inside component)
-
-              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 relative">
+              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={file.preview}
                   alt="Preview"
                   className="w-full h-full object-cover"
-                />
-              </div>
-
-// ... (later for uploaded urls)
-
-              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 relative">
-                <Image
-                  src={url}
-                  alt={`Uploaded ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -230,11 +215,13 @@ export function ImageUpload({
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {uploadedUrls.map((url, index) => (
             <div key={url} className="relative group">
-              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                <img
+              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 relative">
+                <Image
                   src={url}
                   alt={`Uploaded ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                 />
               </div>
               <button
