@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/Button';
@@ -21,7 +20,6 @@ import {
 
 export function Header() {
   const { isAuthenticated, user, logout } = useAuth();
-  const pathname = usePathname();
   const { itemCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -143,7 +141,7 @@ export function Header() {
               </div>
             ) : (
               <div className="hidden sm:flex items-center gap-2">
-                <Link href={`/login?redirect=${encodeURIComponent(pathname)}`}>
+                <Link href="/login">
                   <Button variant="ghost" size="sm">Login</Button>
                 </Link>
                 <Link href="/register">
@@ -177,7 +175,7 @@ export function Header() {
             ))}
             {!isAuthenticated && (
               <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
-                <Link href={`/login?redirect=${encodeURIComponent(pathname)}`} onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                   <Button variant="outline" className="w-full">Login</Button>
                 </Link>
                 <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
