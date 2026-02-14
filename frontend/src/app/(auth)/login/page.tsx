@@ -17,7 +17,7 @@ function LoginForm() {
   const { login, isLoading, error, clearError } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const redirectTo = searchParams.get('redirect') || '/cart';
 
   const {
     register,
