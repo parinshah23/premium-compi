@@ -51,5 +51,5 @@ databases:
   - name: raffle-db
     plan: free
     region: frankfurt
-    user: postgres
+    user: raffle_user
     databaseName: raffle_db
