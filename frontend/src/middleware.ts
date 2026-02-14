@@ -3,16 +3,19 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get('refreshToken')?.value;
-  
+
   // Routes that require authentication
   // Note: We use config.matcher to filter, so this runs on those routes.
   // We can add more logic here if needed.
-  
+
   if (!refreshToken) {
     const loginUrl = new URL('/login', request.url);
     // Add redirect param so we can send them back after login
-    loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
-    return NextResponse.redirect(loginUrl);
+    // loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
+    // return NextResponse.redirect(loginUrl);
+    // TEMPORARY FIX: Allow request through because cross-domain cookies (Render -> Vercel)
+    // are not visible to this middleware. Auth is still enforced by the Backend API.
+    return NextResponse.next();
   }
 
   return NextResponse.next();
