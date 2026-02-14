@@ -13,7 +13,9 @@ services:
       - key: NPM_CONFIG_PRODUCTION
         value: false
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: raffle-db
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
       - key: REFRESH_TOKEN_SECRET
@@ -44,3 +46,10 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+
+databases:
+  - name: raffle-db
+    plan: free
+    region: frankfurt
+    user: postgres
+    databaseName: raffle_db
