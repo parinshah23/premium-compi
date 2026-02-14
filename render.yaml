@@ -12,14 +12,14 @@ services:
         value: production
       - key: NPM_CONFIG_PRODUCTION
         value: false
-      - key: PORT
-        value: 10000
       - key: DATABASE_URL
         sync: false
       - key: JWT_SECRET
-        sync: false
+        generateValue: true
       - key: REFRESH_TOKEN_SECRET
-        sync: false
+        generateValue: true
+      - key: PORT
+        value: 10000
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
