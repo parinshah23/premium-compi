@@ -8,10 +8,10 @@ import { ConflictError, UnauthorizedError } from '../middleware/errorHandler';
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await authService.register(req.body);
-    
+
     // Send welcome email
     await emailService.sendWelcomeEmail(user.email, user.first_name);
-    
+
     sendSuccess(res, { data: user, message: 'User registered successfully' }, 201);
   } catch (error) {
     if (error instanceof Error && error.message === 'Email already in use') {
@@ -25,12 +25,12 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   try {
     const { email, password } = req.body;
     const result = await authService.login(email, password);
-    
+
     // In a real app, you might set the refresh token as an httpOnly cookie
     res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production', // Must be true for sameSite: 'none'
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-site
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 

@@ -18,6 +18,9 @@ import routes from './routes';
 
 const app = express();
 
+// Trust Render's proxy to ensure cookies are secure
+app.set('trust proxy', 1);
+
 // Initialize Sentry for error tracking (must be first!)
 if (process.env.SENTRY_DSN) {
   Sentry.init({
